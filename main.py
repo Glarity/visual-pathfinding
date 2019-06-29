@@ -6,10 +6,17 @@ WIDTH = 800
 
 root = tk.Tk()
 canvas = tk.Canvas(root, height=HEIGHT, width=WIDTH, bg="white")
-main_grid = Grid(15, 100, canvas, WIDTH, HEIGHT)
+main_grid = Grid(15, 100, root, canvas, WIDTH, HEIGHT)
+
+
+def flood():
+    main_grid.flood(0, 0, "white", "green")
+
 
 decrease_scale_button = tk.Button(root, text="Decrease Grid Scale", command=main_grid.decrease_scale)
 increase_scale_button = tk.Button(root, text="Increase Grid Scale", command=main_grid.increase_scale)
+clear_array_button = tk.Button(root, text="Clear Array", command=main_grid.clear_array)
+flood_button = tk.Button(root, text="Flood", command=flood)
 
 
 def drawing(event):
@@ -28,4 +35,6 @@ canvas.bind("<B3-Motion>", drawing)
 canvas.pack()
 decrease_scale_button.pack()
 increase_scale_button.pack()
+clear_array_button.pack()
+flood_button.pack()
 root.mainloop()
