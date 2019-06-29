@@ -1,12 +1,16 @@
+import time
+
+
 class Grid:
-    def __init__(self, scale, size, canvas, canvas_width, canvas_height):
+    def __init__(self, scale, size, root, canvas, canvas_width, canvas_height):
         self.scale = scale
         self.size = size
+        self.root = root
         self.canvas = canvas
         self.canvas_width = canvas_width
         self.canvas_height = canvas_height
-        self.array = {(i, j): "white" for i in range(self.size) for j in range(self.size)}
-        self.draw()
+        self.flood_speed = 0
+        self.clear_array()
 
     def increase_scale(self):
         self.scale += 5
@@ -20,6 +24,28 @@ class Grid:
     def change_color(self, x, y, color):
         self.array[x, y] = color
         self.draw()
+
+    def clear_array(self):
+        self.array = {(i, j): "white" for i in range(self.size) for j in range(self.size)}
+        self.draw()
+
+    def flood(self, x, y, target, replacement):
+        if x < 0 or x == self.size or y < 0 or y == self.size:
+            return
+        if self.array[x, y] == replacement:
+            return
+        elif self.array[x, y] != target:
+            return
+        else:
+            self.change_color(x, y, replacement)
+
+        self.root.update_idletasks()
+
+        self.flood(x - 1, y, target, replacement)
+        self.flood(x + 1, y, target, replacement)
+        self.flood(x, y - 1, target, replacement)
+        self.flood(x, y + 1, target, replacement)
+        return
 
     def draw(self):
         self.canvas.delete("all")
