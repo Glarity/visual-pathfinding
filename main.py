@@ -1,12 +1,14 @@
 from grid import Grid
 import tkinter as tk
+import sys
 
 HEIGHT = 600
 WIDTH = 800
 
+sys.setrecursionlimit(10000)
 root = tk.Tk()
 canvas = tk.Canvas(root, height=HEIGHT, width=WIDTH, bg="white")
-main_grid = Grid(15, 100, root, canvas, WIDTH, HEIGHT)
+main_grid = Grid(15, 80, root, canvas, WIDTH, HEIGHT)
 
 
 def flood():

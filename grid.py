@@ -9,7 +9,7 @@ class Grid:
         self.canvas = canvas
         self.canvas_width = canvas_width
         self.canvas_height = canvas_height
-        self.flood_speed = 0
+        self.flood_speed = .00
         self.clear_array()
 
     def increase_scale(self):
@@ -23,14 +23,15 @@ class Grid:
 
     def change_color(self, x, y, color):
         self.array[x, y] = color
-        self.draw()
+        self.canvas.itemconfig("grid_sqaure_" + str(x) + "_" + str(y), fill=color)
 
     def clear_array(self):
         self.array = {(i, j): "white" for i in range(self.size) for j in range(self.size)}
         self.draw()
 
     def flood(self, x, y, target, replacement):
-        if x < 0 or x == self.size or y < 0 or y == self.size:
+        print(x, y, self.size)
+        if x < 0 or x >= self.size or y < 0 or y >= self.size:
             return
         if self.array[x, y] == replacement:
             return
@@ -40,7 +41,7 @@ class Grid:
             self.change_color(x, y, replacement)
 
         self.root.update_idletasks()
-
+        time.sleep(self.flood_speed)
         self.flood(x - 1, y, target, replacement)
         self.flood(x + 1, y, target, replacement)
         self.flood(x, y - 1, target, replacement)
