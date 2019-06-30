@@ -9,7 +9,9 @@ class Grid:
         self.canvas = canvas
         self.canvas_width = canvas_width
         self.canvas_height = canvas_height
-        self.flood_speed = .00
+        self.flood_speed = .01
+        self.flood_start_x = 0
+        self.flood_start_y = 0
         self.clear_array()
 
     def increase_scale(self):
@@ -29,12 +31,22 @@ class Grid:
         self.array = {(i, j): "white" for i in range(self.size) for j in range(self.size)}
         self.draw()
 
+    def set_start(self, x, y):
+        self.change_color(self.flood_start_x, self.flood_start_y, "white")
+        self.flood_start_x = x
+        self.flood_start_y = y
+        self.change_color(x, y, "blue")
+
+    def start_flood(self):
+        self.flood(self.flood_start_x, self.flood_start_y, "white", "green")
+
     def flood(self, x, y, target, replacement):
-        print(x, y, self.size)
         if x < 0 or x >= self.size or y < 0 or y >= self.size:
             return
         if self.array[x, y] == replacement:
             return
+        elif x == self.flood_start_x and y == self.flood_start_y:
+            self.change_color(x, y, replacement)
         elif self.array[x, y] != target:
             return
         else:
@@ -55,3 +67,4 @@ class Grid:
         for i in range(self.size):
             for j in range(self.size):
                 self.canvas.create_rectangle(self.scale * i + 1, self.scale * j + 1, self.scale * (i + 1) + 1, self.scale * (j + 1) + 1, tags="grid_sqaure_" + str(i) + "_" + str(j), fill=self.array[i, j])
+        self.change_color(self.flood_start_x, self.flood_start_y, "blue")

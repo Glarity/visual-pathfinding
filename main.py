@@ -8,17 +8,14 @@ WIDTH = 800
 sys.setrecursionlimit(10000)
 root = tk.Tk()
 canvas = tk.Canvas(root, height=HEIGHT, width=WIDTH, bg="white")
+button_frame = tk.Frame(root)
 main_grid = Grid(15, 80, root, canvas, WIDTH, HEIGHT)
 
 
-def flood():
-    main_grid.flood(0, 0, "white", "green")
-
-
-decrease_scale_button = tk.Button(root, text="Decrease Grid Scale", command=main_grid.decrease_scale)
-increase_scale_button = tk.Button(root, text="Increase Grid Scale", command=main_grid.increase_scale)
-clear_array_button = tk.Button(root, text="Clear Array", command=main_grid.clear_array)
-flood_button = tk.Button(root, text="Flood", command=flood)
+decrease_scale_button = tk.Button(button_frame, text="Decrease Grid Scale", command=main_grid.decrease_scale)
+increase_scale_button = tk.Button(button_frame, text="Increase Grid Scale", command=main_grid.increase_scale)
+clear_array_button = tk.Button(button_frame, text="Clear Array", command=main_grid.clear_array)
+flood_button = tk.Button(button_frame, text="Flood", command=main_grid.start_flood)
 
 
 def drawing(event):
@@ -26,17 +23,20 @@ def drawing(event):
     grid_y = int(event.y / main_grid.scale)
     fill_color = ""
     if (event.state == 256):
-        fill_color = "red"
-    elif (event.state == 1024):
-        fill_color = "blue"
+        fill_color = "black"
     main_grid.change_color(grid_x, grid_y, fill_color)
 
 
+def set_start(event):
+    main_grid.set_start(int(event.x / main_grid.scale), int(event.y / main_grid.scale))
+
+
 canvas.bind("<B1-Motion>", drawing)
-canvas.bind("<B3-Motion>", drawing)
+canvas.bind("<Button-3>", set_start)
 canvas.pack()
-decrease_scale_button.pack()
-increase_scale_button.pack()
-clear_array_button.pack()
-flood_button.pack()
+button_frame.pack(side=tk.BOTTOM)
+decrease_scale_button.pack(side=tk.LEFT)
+increase_scale_button.pack(side=tk.LEFT)
+clear_array_button.pack(side=tk.LEFT)
+flood_button.pack(side=tk.LEFT)
 root.mainloop()
