@@ -1,4 +1,5 @@
 import time
+import threading
 
 
 class Grid:
@@ -12,6 +13,7 @@ class Grid:
         self.flood_speed = .01
         self.flood_start_x = 0
         self.flood_start_y = 0
+        self.stop_thread_flag = 0
         self.clear_array()
 
     def increase_scale(self):
@@ -38,9 +40,22 @@ class Grid:
         self.change_color(x, y, "blue")
 
     def start_flood(self):
-        self.flood(self.flood_start_x, self.flood_start_y, "white", "green")
+        def start_flood_thread():
+            self.flood(self.flood_start_x, self.flood_start_y, "white", "green")
+            print("Done flooding")
+            self.stop_thread_flag = 0
+
+        flood_thread = threading.Thread(target=start_flood_thread)
+        flood_thread.start()
+        print("Active threads: " + str(threading.active_count()))
+
+    def stop_flood(self):
+        print("Stopping flood")
+        self.stop_thread_flag = 1
 
     def flood(self, x, y, target, replacement):
+        if self.stop_thread_flag == 1:
+            return
         if x < 0 or x >= self.size or y < 0 or y >= self.size:
             return
         if self.array[x, y] == replacement:
@@ -62,8 +77,8 @@ class Grid:
 
     def draw(self):
         self.canvas.delete("all")
-        grid_width = round(self.canvas_width / self.scale)
-        grid_height = round(self.canvas_height / self.scale)
+        # grid_width = round(self.canvas_width / self.scale)
+        # grid_height = round(self.canvas_height / self.scale)
         for i in range(self.size):
             for j in range(self.size):
                 self.canvas.create_rectangle(self.scale * i + 1, self.scale * j + 1, self.scale * (i + 1) + 1, self.scale * (j + 1) + 1, tags="grid_sqaure_" + str(i) + "_" + str(j), fill=self.array[i, j])

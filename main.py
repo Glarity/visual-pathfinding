@@ -16,6 +16,7 @@ decrease_scale_button = tk.Button(button_frame, text="Decrease Grid Scale", comm
 increase_scale_button = tk.Button(button_frame, text="Increase Grid Scale", command=main_grid.increase_scale)
 clear_array_button = tk.Button(button_frame, text="Clear Array", command=main_grid.clear_array)
 flood_button = tk.Button(button_frame, text="Flood", command=main_grid.start_flood)
+stop_flood_button = tk.Button(button_frame, text="Stop Flood", command=main_grid.stop_flood)
 
 
 def drawing(event):
@@ -39,4 +40,5 @@ decrease_scale_button.pack(side=tk.LEFT)
 increase_scale_button.pack(side=tk.LEFT)
 clear_array_button.pack(side=tk.LEFT)
 flood_button.pack(side=tk.LEFT)
+stop_flood_button.pack(side=tk.LEFT)
 root.mainloop()
